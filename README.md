@@ -1,2 +1,2 @@
 # gdcm-pypi
-PyPI package generator for GDCM
+PyPI package for [GDCM](https://github.com/malaterre/GDCM/)
