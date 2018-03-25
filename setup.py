@@ -33,18 +33,22 @@ class build_ext(build_ext_orig):
         cmake_args = [
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + str(extdir.parent.absolute()),
             '-DCMAKE_BUILD_TYPE=' + config,
-            '-DGDCM_USE_VTK=ON',
-            '-GDCM_WRAP_PYTHON=ON',
+            '-DGDCM_BUILD_SHARED_LIBS:BOOL=ON',
+            '-DGDCM_DOCUMENTATION:BOOL=OFF',
+            '-DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF',
+            '-DGDCM_USE_VTK:BOOL=ON',
+            '-DGDCM_WRAP_PYTHON:BOOL=ON',
         ]
 
         # example of build args
         build_args = [
             '--config', config,
-            '--', '-j4'
+            '--target', ext.name,
+            '--', '-j4',
         ]
 
         os.chdir(str(build_temp))
-        self.spawn(['cmake', str(cwd)] + cmake_args)
+        self.spawn(['cmake', os.path.join(str(cwd), 'GDCM')] + cmake_args)
         if not self.dry_run:
             self.spawn(['cmake', '--build', '.'] + build_args)
         os.chdir(str(cwd))
@@ -97,11 +101,11 @@ setup(name='gdcm',
         'Programming Language :: Python :: 3.7',
       ],
       keywords='tomography gdcm',
-      packages=['vtkgdcm'],
+      packages=['GDCM'],
       install_requires=[
           'vtk',
       ],
-      ext_modules=[CMakeExtension('spam/foo')],
+      ext_modules=[CMakeExtension('vtkgdcmPython')],
       cmdclass={
           'build_ext': build_ext,
       },
