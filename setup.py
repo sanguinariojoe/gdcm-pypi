@@ -16,7 +16,7 @@ class build_ext(build_ext_orig):
     def run(self):
         for ext in self.extensions:
             self.build_cmake(ext)
-        super().run()
+        # super().run() # Avoid vtkgdcmPython.cpython-36m-x86_64-linux-gnu.so
 
     def build_cmake(self, ext):
         cwd = pathlib.Path().absolute()
@@ -26,13 +26,14 @@ class build_ext(build_ext_orig):
         build_temp = pathlib.Path(self.build_temp)
         build_temp.mkdir(parents=True, exist_ok=True)
         extdir = pathlib.Path(self.get_ext_fullpath(ext.name))
+        extdir = extdir.parent
         extdir.mkdir(parents=True, exist_ok=True)
 
         # example of cmake args
         config = 'Debug' if self.debug else 'Release'
         cmake_args = [
-            '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + str(extdir.parent.absolute()),
-            '-DLIBRARY_OUTPUT_PATH=' + str(extdir.parent.absolute()),
+            '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + str(extdir.absolute()),
+            '-DLIBRARY_OUTPUT_PATH=' + str(extdir.absolute()),
             '-DCMAKE_BUILD_TYPE=' + config,
             '-DGDCM_BUILD_SHARED_LIBS:BOOL=ON',
             '-DGDCM_DOCUMENTATION:BOOL=OFF',
@@ -56,7 +57,7 @@ class build_ext(build_ext_orig):
 
 
 setup(name='vtkgdcm',
-      version='2.8.6-dev2',
+      version='2.8.6-dev6',
       author='Jose Luis Cercos-Pita',
       author_email='jlcercos@gmail.com',
       url='https://github.com/sanguinariojoe/gdcm-pypi',
