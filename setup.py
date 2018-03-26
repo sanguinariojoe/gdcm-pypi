@@ -56,7 +56,7 @@ class build_ext(build_ext_orig):
 
 
 setup(name='vtkgdcm',
-      version='2.8.6-dev',
+      version='2.8.6-dev2',
       author='Jose Luis Cercos-Pita',
       author_email='jlcercos@gmail.com',
       url='https://github.com/sanguinariojoe/gdcm-pypi',
@@ -102,7 +102,7 @@ setup(name='vtkgdcm',
         'Programming Language :: Python :: 3.7',
       ],
       keywords='tomography gdcm',
-      packages=['GDCM'],
+      packages=[],
       install_requires=[
           'vtk',
       ],
