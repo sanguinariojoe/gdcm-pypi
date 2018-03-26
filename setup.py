@@ -32,6 +32,7 @@ class build_ext(build_ext_orig):
         config = 'Debug' if self.debug else 'Release'
         cmake_args = [
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + str(extdir.parent.absolute()),
+            '-DLIBRARY_OUTPUT_PATH=' + str(extdir.parent.absolute()),
             '-DCMAKE_BUILD_TYPE=' + config,
             '-DGDCM_BUILD_SHARED_LIBS:BOOL=ON',
             '-DGDCM_DOCUMENTATION:BOOL=OFF',
@@ -54,7 +55,7 @@ class build_ext(build_ext_orig):
         os.chdir(str(cwd))
 
 
-setup(name='gdcm',
+setup(name='vtkgdcm',
       version='2.8.6-dev',
       author='Jose Luis Cercos-Pita',
       author_email='jlcercos@gmail.com',
@@ -85,7 +86,7 @@ setup(name='gdcm',
         'Topic :: Scientific/Engineering :: Medical Science Apps.',
 
         # Pick your license as you wish (should match "license" above)
-        'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)',
+        'License :: OSI Approved :: BSD License',
 
         # Specify the Python versions you support here. In particular, ensure
         # that you indicate whether you support Python 2, Python 3 or both.
