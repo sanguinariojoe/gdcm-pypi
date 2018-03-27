@@ -2,6 +2,7 @@
 
 from distutils.command.build_ext import build_ext as build_ext_orig
 import os
+import sys
 import pathlib
 from setuptools import setup, Extension
 
@@ -35,12 +36,22 @@ class build_ext(build_ext_orig):
             '-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + str(extdir.absolute()),
             '-DLIBRARY_OUTPUT_PATH=' + str(extdir.absolute()),
             '-DCMAKE_BUILD_TYPE=' + config,
+            '-DCMAKE_SKIP_RPATH:BOOL=FALSE',
+            '-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=TRUE',
+            '-DCMAKE_INSTALL_RPATH_USE_LINK_PATH:BOOL=FALSE',
             '-DGDCM_BUILD_SHARED_LIBS:BOOL=ON',
             '-DGDCM_DOCUMENTATION:BOOL=OFF',
             '-DGDCM_BUILD_DOCBOOK_MANPAGES:BOOL=OFF',
             '-DGDCM_USE_VTK:BOOL=ON',
             '-DGDCM_WRAP_PYTHON:BOOL=ON',
         ]
+        if sys.platform.startswith('freebsd'):
+            cmake_args.append(r'-DCMAKE_INSTALL_RPATH=$ORIGIN')
+        elif sys.platform.startswith('linux'):
+            cmake_args.append(r'-DCMAKE_INSTALL_RPATH=$ORIGIN')
+        elif sys.platform.startswith('darwin'):
+            cmake_args.append(r'-DCMAKE_INSTALL_RPATH=@loader_path')
+
 
         # example of build args
         build_args = [
@@ -57,7 +68,7 @@ class build_ext(build_ext_orig):
 
 
 setup(name='vtkgdcm',
-      version='2.8.6-dev6',
+      version='2.8.6-dev7',
       author='Jose Luis Cercos-Pita',
       author_email='jlcercos@gmail.com',
       url='https://github.com/sanguinariojoe/gdcm-pypi',
